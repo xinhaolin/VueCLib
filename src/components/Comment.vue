@@ -1,5 +1,5 @@
 <template>
-  <div v-show="cmt_show" class="cmt_box">
+  <div v-if="cmt_show" class="cmt_box">
     <div
       ref="cmt_input"
       class="content_edit"
@@ -78,15 +78,13 @@ export default {
   data: function() {
     return {
       content: "",
-      winSn: "",
+      widFouce: "",
+      rangeFouce: "",
       iconShow: false,
       isSubmit: false
     };
   },
   watch: {
-    content: function(val, oldVal) {
-      console.log(val, "-", oldVal);
-    },
     cmt_show: {
       handler(value) {
         if (value) {
