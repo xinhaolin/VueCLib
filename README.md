@@ -1,6 +1,8 @@
 # Vue组件仓库
 
 ## 评论组件
+<img src="https://img-blog.csdnimg.cn/20201010095608925.jpg" width = "300" height = "200" alt="图片名称" align=center />
+
 ### 传递参数：
  1. submitCmtLoading：Boolean 是否正在提交
  2. limtText：Number 限制字符长度  0为不限制
