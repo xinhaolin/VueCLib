@@ -1,4 +1,5 @@
-# Vue组件仓库
+# Vue组件仓库(新)
+### 以前写的组件代码仓库不见，重新建一个吧，希望能坚持下去。
 
 ## 评论组件
 <img src="https://img-blog.csdnimg.cn/20201010095608925.jpg" width = "300" height = "200" alt="图片名称" align=center />
