@@ -75,7 +75,7 @@ export default {
       type: Object
     }
   },
-  data: function() {
+  data: function () {
     return {
       content: "",
       winSn: "",
@@ -84,7 +84,7 @@ export default {
     };
   },
   watch: {
-    content: function(val, oldVal) {
+    content: function (val, oldVal) {
       console.log(val, "-", oldVal);
     },
     cmt_show: {
@@ -270,7 +270,8 @@ export default {
         //  要判断的光标状态
         if (
           winSn.focusNode.className !== "content_edit" &&
-          winSn.focusNode.parentElement.className !== "content_edit"
+          winSn.focusNode.parentElement.className !== "content_edit" &&
+          !this.isAncestorsDom(winSn.baseNode,'content_edit')
         ) {
           winSn.selectAllChildren(self.$refs.cmt_input);
           winSn.collapseToEnd();
@@ -300,6 +301,18 @@ export default {
     },
     blurInput() {
       this.getFouceInput();
+    },
+    isAncestorsDom(dom, className) {
+      let tempDom = dom
+      if (!tempDom || !className) return false
+      while (tempDom.nodeName.toUpperCase() !== 'BODY') {
+
+        if (tempDom.classList && Array.from(tempDom.classList).includes(className)) {
+          return true
+        }
+        tempDom = tempDom.parentElement
+      }
+      return false
     },
     submitCmt() {
       // 提交评论
