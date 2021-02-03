@@ -8,6 +8,7 @@
       @focus="changeHandle"
       @input="changeText"
       @blur="blurInput"
+      @paste="pasteInput"
       v-html="content"
     ></div>
     <div class="cmt_handle">
@@ -91,6 +92,10 @@ export default {
       type: String,
       default: "积极回复可吸引更多人评论"
     },
+    filterPaste: {
+      type: Boolean,
+      default: true
+    },
     info: {
       type: Object
     }
@@ -113,7 +118,6 @@ export default {
       handler(value) {
         if (value) {
           this.$nextTick(() => {
-            console.log("this.$refs.cmt_input", this.$refs.cmt_input);
             this.toLast(this.$refs.cmt_input);
           });
         }
@@ -139,7 +143,6 @@ export default {
     changeHandle() {
       console.log("blur");
     },
-
     changeText(e) {
       //  表情包插入时不触发该方法，只有输入时会触发
       // 判断字数，要先把自定义表情改成占位符，一个自定义表情按俩2个字符算
@@ -354,6 +357,16 @@ export default {
     },
     changeIconIndex(index) {
       this.iconIndex = index;
+    },
+    pasteInput(event) {
+      if (!this.filterPaste) return;
+      let text = event.clipboardData.getData("text");
+      const selection = window.getSelection();
+      if (!selection.rangeCount) return false;
+      selection.deleteFromDocument();
+      selection.getRangeAt(0).insertNode(document.createTextNode(text));
+      selection.getRangeAt(0).collapse(false);
+      event.preventDefault();
     }
   }
 };
