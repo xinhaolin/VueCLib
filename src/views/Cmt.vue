@@ -15,7 +15,7 @@
       :iconWidth="iconWidth"
       :iconHeight="iconHeight"
       :cmt_show="cmt_show"
-      :iconList="iconList"
+      :iconList="imgList"
       @changeText="changeText"
       @submitError="submitError"
       @submitSuccess="submitSuccess"
@@ -38,8 +38,20 @@ export default {
       iconWidth: 24,
       iconHeight: 24,
       cmt_show: true,
-      iconList: [
-        "https://gold-cdn.xitu.io/asset/twemoji/2.6.0/svg/1f603.svg",
+      iconList: ["https://gold-cdn.xitu.io/asset/twemoji/2.6.0/svg/1f603.svg"],
+      imgList: [
+        {
+          icon: "//www1.pconline.com.cn/20200929/pgc/cmt/icon.png", // tab的icon
+          width: 30, // tab icon的宽度
+          height: 30, // tab icon的高度
+          list: ["//gold-cdn.xitu.io/asset/twemoji/2.6.0/svg/1f603.svg"]
+        },
+        {
+          icon: "//www1.pconline.com.cn/20200929/pgc/cmt/icon.png", // tab的icon
+          width: 30, // tab icon的宽度
+          height: 30, // tab icon的高度
+          list: ["//gold-cdn.xitu.io/asset/twemoji/2.6.0/svg/1f603.svg"]
+        }
       ]
     };
   },

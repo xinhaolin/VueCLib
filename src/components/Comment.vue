@@ -24,14 +24,34 @@
         发布
       </div>
       <div v-show="iconShow" class="icon_list">
-        <ul class="icon_box">
+        <div class="icon_tabs">
+          <div
+            v-for="(item, index) in iconList"
+            :key="`tab_${index}`"
+            :class="['tabs_item', iconIndex === index ? 'tabs_cur' : '']"
+            :style="
+              `width:${item.width ? item.width : 30}px;height:${
+                item.height ? item.height : 30
+              }px;`
+            "
+            @click="changeIconIndex(index)"
+          >
+            <img :src="item.icon" />
+          </div>
+        </div>
+        <ul
+          class="icon_box"
+          v-for="(item, index) in iconList"
+          :key="`tab_${index}`"
+          v-show="iconIndex === index"
+        >
           <li
             class="icon_item"
-            v-for="(item, index) in iconList"
-            :key="`icon${index}`"
-            @click="insertIcon(item)"
+            v-for="(iconItem, iconIndex) in item.list"
+            :key="`icon${iconIndex}`"
+            @click="insertIcon(iconItem)"
           >
-            <img :src="item" />
+            <img :src="iconItem" />
           </li>
         </ul>
       </div>
@@ -75,17 +95,18 @@ export default {
       type: Object
     }
   },
-  data: function () {
+  data: function() {
     return {
       content: "",
       widFouce: "",
       rangeFouce: "",
+      iconIndex: 0,
       iconShow: false,
       isSubmit: false
     };
   },
   watch: {
-    content: function (val, oldVal) {
+    content: function(val, oldVal) {
       console.log(val, "-", oldVal);
     },
     cmt_show: {
@@ -102,7 +123,7 @@ export default {
   },
   mounted() {
     const self = this;
-    document.getElementById("app").addEventListener("click", self.setHideClick);
+    document.addEventListener("click", self.setHideClick);
     self.$once("hook:beforeDestroy", () => {
       document.getElementById("app") &&
         document
@@ -113,13 +134,7 @@ export default {
   methods: {
     setHideClick(event) {
       let target = event.srcElement;
-      let nameList = ["icon_item", "icon_list", "icon_box"];
-      if (
-        !nameList.includes(target.className) &&
-        !nameList.includes(target.parentElement.className)
-      ) {
-        this.iconShow = false;
-      }
+      !this.isAncestorsDom(target, "icon_list") && (this.iconShow = false);
     },
     changeHandle() {
       console.log("blur");
@@ -272,7 +287,7 @@ export default {
         if (
           winSn.focusNode.className !== "content_edit" &&
           winSn.focusNode.parentElement.className !== "content_edit" &&
-          !this.isAncestorsDom(winSn.baseNode,'content_edit')
+          !this.isAncestorsDom(winSn.baseNode, "content_edit")
         ) {
           winSn.selectAllChildren(self.$refs.cmt_input);
           winSn.collapseToEnd();
@@ -304,16 +319,23 @@ export default {
       this.getFouceInput();
     },
     isAncestorsDom(dom, className) {
-      let tempDom = dom
-      if (!tempDom || !className) return false
-      while (tempDom.nodeName.toUpperCase() !== 'BODY') {
-
-        if (tempDom.classList && Array.from(tempDom.classList).includes(className)) {
-          return true
+      let tempDom = dom;
+      if (!tempDom || !className) return false;
+      if (
+        ~tempDom.nodeName.toUpperCase().indexOf("DOCUMENT") ||
+        ~tempDom.nodeName.toUpperCase().indexOf("HTML")
+      )
+        return false;
+      while (tempDom.nodeName.toUpperCase() !== "BODY") {
+        if (
+          tempDom.classList &&
+          Array.from(tempDom.classList).includes(className)
+        ) {
+          return true;
         }
-        tempDom = tempDom.parentElement
+        tempDom = tempDom.parentElement;
       }
-      return false
+      return false;
     },
     submitCmt() {
       // 提交评论
@@ -329,6 +351,9 @@ export default {
         return;
       }
       self.$emit("submitSuccess", text, self.info);
+    },
+    changeIconIndex(index) {
+      this.iconIndex = index;
     }
   }
 };
@@ -387,7 +412,7 @@ export default {
       position: absolute;
       top: 40px;
       left: -10px;
-      width: 280px;
+      min-width: 280px;
       border-radius: 2px;
       background: #fff;
       box-shadow: 0 5px 18px 0 rgba(0, 0, 0, 0.16);
@@ -405,13 +430,38 @@ export default {
         border-right: 10px solid transparent;
         border-bottom: 10px solid #fff;
       }
+      .icon_tabs {
+        border-bottom: solid 1px #ccc;
+        display: flex;
+        position: relative;
+        .tabs_item {
+          position: relative;
+          padding-bottom: 4px;
+          img {
+            width: 100%;
+            height: 100%;
+          }
+          & + .tabs_item {
+            margin-left: 10px;
+          }
+          &.tabs_cur::before {
+            content: "";
+            width: 100%;
+            height: 2px;
+            background-color: #f95354;
+            display: block;
+            position: absolute;
+            bottom: -1px;
+          }
+        }
+      }
       .icon_box {
         list-style: none;
         display: flex;
-        justify-content: start;
+        justify-content: flex-start;
         align-items: center;
         flex-wrap: wrap;
-        padding: 0;
+        padding: 10px 0;
         margin: 0;
 
         .icon_item {
