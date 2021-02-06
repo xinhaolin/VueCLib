@@ -190,7 +190,6 @@ export default {
      */
     reductionStr(sourceText, text, key) {
       // 解析内容，把图片全部用占位替换掉
-      // eslint-disable-next-line no-useless-escape
       let imgReg = /<img[^>]*src[=\'\"\s]+([^\"\']*)[\"\']?[^>]*>/gi;
       let imgMatch = sourceText.match(imgReg);
       let result = text;
